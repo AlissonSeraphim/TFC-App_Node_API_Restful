@@ -2,19 +2,18 @@
 FROM node:16.14-alpine
 
 # Mudar para o diretório de trabalho /app-frontend
-WORKDIR /app-backend
+WORKDIR /app-frontend
 
 
 # Copiar os package.json e package-lock.json para o container
 COPY package*.json ./
-COPY package*.npm ./
 
 # Instalar as dependências Node
 RUN npm install
 
 
 # Copiar o restante dos arquivos da aplicação para o container
-COPY */ ./
+COPY . .
 
 # Sinalize que aplicação expõe a porta 3000
 EXPOSE 3000
