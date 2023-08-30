@@ -25,4 +25,22 @@ describe('TeamsService', function() {
     expect(status).to.be.equal(200);
     expect(body).to.be.deep.equal(arrayTeamsMock);
   });
+
+  it('Retorna o time com id 1 com sucesso 200', async function() { 
+    sinon.stub(TeamsModel, 'findByPk').resolves(arrayTeamsMock[0] as any);
+
+    const {status, body} = await chai.request(app).get('/teams/1');
+    
+    expect(status).to.be.equal(200);
+    expect(body).to.be.deep.equal(arrayTeamsMock[0]);
+  });
+
+  it('Retorna erro 404 quando não encontra o time', async function() { 
+    sinon.stub(TeamsModel, 'findByPk').resolves(null);
+
+    const {status, body} = await chai.request(app).get('/teams/999999');
+    
+    expect(status).to.be.equal(404);
+    expect(body).to.be.deep.equal({ message: 'Time não encontrado' });
+  });
 })
