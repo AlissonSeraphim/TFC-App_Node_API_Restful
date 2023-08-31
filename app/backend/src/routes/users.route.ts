@@ -13,7 +13,6 @@ const router = Router();
 router.post(
   '/',
   Validations.validateUser,
-  // Validations.validateToken,
   (req, res) => userController.login(req, res),
 );
 

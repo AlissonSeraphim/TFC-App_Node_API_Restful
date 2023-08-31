@@ -1,40 +1,37 @@
 import { NextFunction, Request, Response } from 'express';
-import JWT from '../utils/JWT';
+// import JWT from '../utils/JWT';
 
 class Validations {
-  // static validateBook(req: Request, res: Response, next: NextFunction): Response | void {
-  //   const book = req.body;
-  //   const requiredKeys = ['title', 'price', 'author', 'isbn'];
-  //   const notFoundKey = requiredKeys.find((key) => !(key in book));
-  //   if (notFoundKey) {
-  //     return res.status(400).json({ message: `${notFoundKey} is required` });
-  //   }
-
-  //   next();
-  // }
-
   static validateUser(req: Request, res: Response, next: NextFunction): Response | void {
     const user = req.body;
-    const requiredKeys = ['email', 'password'];
-    const notFoundKey = requiredKeys.find((key) => !(key in user));
-    if (notFoundKey) {
+
+    const minPasswordLength = 6;
+
+    if (user.email.length < 1 || user.password.length < 1) {
       return res.status(400).json({ message: 'All fields must be filled' });
     }
 
+    const regexEmail = /\S+@\S+\.\S+/;
+    const regexBoolean = regexEmail.test(user.email);
+    console.log('REGEX BOOLEAN ===>>>>>>>>', regexBoolean);
+    if (!regexBoolean || user.password.length < minPasswordLength) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
     next();
   }
 
-  static validateToken(req: Request, res: Response, next: NextFunction): Response | void {
-    const token = req.headers.authorization;
-    if (!token) {
-      return res.status(401).json({ message: 'Token not found' });
-    }
-    const validToken = JWT.verify(token);
-    if (validToken === 'Token must be a valid Token') {
-      return res.status(401).json({ message: validToken });
-    }
-    next();
-  }
+  // static validateToken(req: Request, res: Response, next: NextFunction): Response | void {
+  //   const token = req.headers.authorization;
+  //   if (!token) {
+  //     return res.status(401).json({ message: 'Token not found' });
+  //   }
+  //   const validToken = JWT.verify(token);
+  //   if (validToken === 'Token must be a valid Token') {
+  //     return res.status(401).json({ message: validToken });
+  //   }
+  //   next();
+  // }
 }
 
 export default Validations;

@@ -11,6 +11,7 @@ import { IToken } from '../Interfaces/IToken';
 export default class UsersService {
   constructor(
     private usersModel: IUsersModel = new UsersModelClass(),
+    private stringInvalidMessage = 'Invalid email or password',
   ) { }
 
   public async findAll(): Promise<ServiceResponse<IUserResponse[]>> {
@@ -41,15 +42,19 @@ export default class UsersService {
 
   public async login(data: ILogin):Promise<
   ServiceResponse<IToken | ServiceMessage>> {
-    if (!data.email || !data.password) {
-      return { status: 'INVALID_DATA', data: { message: 'All fields must be filled' } };
+    const user = await this.usersModel.findbyEmail(data.email);
+    if (!user) return { status: 'UNAUTHORIZED', data: { message: this.stringInvalidMessage } };
+
+    if (data.email !== user.email) {
+      return { status: 'UNAUTHORIZED', data: { message: this.stringInvalidMessage } };
     }
 
-    const user = await this.usersModel.findbyEmail(data.email);
-    if (!user) return { status: 'NOT_FOUND', data: { message: 'User not found' } };
-    // if (!bcrypt.compareSync(data.password, user.password)) {
-    //   return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
-    // }
+    const samePassword = bcrypt.compareSync(data.password, user.password);
+
+    if (!samePassword) {
+      return { status: 'UNAUTHORIZED', data: { message: this.stringInvalidMessage } };
+    }
+
     const token = JWT.sign({ email: data.email });
     return { status: 'SUCCESSFUL', data: { token } };
   }
