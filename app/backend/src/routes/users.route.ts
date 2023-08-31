@@ -10,6 +10,12 @@ const router = Router();
 
 // router.get('/:id', (req, res) => userController.getUserById(req, res));
 
+router.get(
+  '/role',
+  Validations.validateToken,
+  (req, res) => userController.getRoleByToken(req, res),
+);
+
 router.post(
   '/',
   Validations.validateUser,

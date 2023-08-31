@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-// import JWT from '../utils/JWT';
+import JWT from '../utils/JWT';
 
 class Validations {
   static validateUser(req: Request, res: Response, next: NextFunction): Response | void {
@@ -21,17 +21,23 @@ class Validations {
     next();
   }
 
-  // static validateToken(req: Request, res: Response, next: NextFunction): Response | void {
-  //   const token = req.headers.authorization;
-  //   if (!token) {
-  //     return res.status(401).json({ message: 'Token not found' });
-  //   }
-  //   const validToken = JWT.verify(token);
-  //   if (validToken === 'Token must be a valid Token') {
-  //     return res.status(401).json({ message: validToken });
-  //   }
-  //   next();
-  // }
+  static validateToken(req: Request, res: Response, next: NextFunction): Response | void {
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({ message: 'Token not found' });
+    }
+    // split do token retirando Bearer e o espaço
+    const tokenSplited = token.split(' ')[1];
+    console.log('TOKEN SPLITED ====>>>>>>>>', tokenSplited);
+
+    const validToken = JWT.verify(tokenSplited);
+    if (validToken === 'Token must be a valid token') {
+      return res.status(401).json({ message: validToken });
+    }
+
+    req.body.userToken = validToken;
+    next();
+  }
 }
 
 export default Validations;

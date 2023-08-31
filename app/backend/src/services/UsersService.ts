@@ -40,6 +40,18 @@ export default class UsersService {
     return { status: 'SUCCESSFUL', data: { id, role, username, email } };
   }
 
+  public async getRoleByToken(userToken: { email: string }):Promise<
+  ServiceResponse<IUser['role'] | ServiceMessage>> {
+    if (!userToken.email) {
+      return { status: 'UNAUTHORIZED', data: { message: 'Token must be a valid token' } };
+    }
+    const user = await this.usersModel.findbyEmail(userToken.email);
+
+    const { role } = user as IUser;
+
+    return { status: 'SUCCESSFUL', data: role };
+  }
+
   public async login(data: ILogin):Promise<
   ServiceResponse<IToken | ServiceMessage>> {
     const user = await this.usersModel.findbyEmail(data.email);
