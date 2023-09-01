@@ -13,7 +13,6 @@ class Validations {
 
     const regexEmail = /\S+@\S+\.\S+/;
     const regexBoolean = regexEmail.test(user.email);
-    console.log('REGEX BOOLEAN ===>>>>>>>>', regexBoolean);
     if (!regexBoolean || user.password.length < minPasswordLength) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
@@ -28,7 +27,6 @@ class Validations {
     }
     // split do token retirando Bearer e o espaço
     const tokenSplited = token.split(' ')[1];
-    console.log('TOKEN SPLITED ====>>>>>>>>', tokenSplited);
 
     const validToken = JWT.verify(tokenSplited);
     if (validToken === 'Token must be a valid token') {

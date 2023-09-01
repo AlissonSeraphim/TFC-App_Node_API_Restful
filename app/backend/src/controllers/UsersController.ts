@@ -7,24 +7,23 @@ export default class UserController {
     private userService = new UsersService(),
   ) { }
 
-  public async getAllUsers(_req: Request, res: Response): Promise<Response> {
-    const serviceResponse = await this.userService.findAll();
-    return res.status(200).json(serviceResponse.data);
-  }
+  // public async getAllUsers(_req: Request, res: Response): Promise<Response> {
+  //   const serviceResponse = await this.userService.findAll();
+  //   return res.status(200).json(serviceResponse.data);
+  // }
 
-  public async getUserById(req: Request, res: Response): Promise<Response> {
-    const serviceResponse = await this.userService.findById(Number(req.params.id));
+  // public async getUserById(req: Request, res: Response): Promise<Response> {
+  //   const serviceResponse = await this.userService.findById(Number(req.params.id));
 
-    if (serviceResponse.status !== 'SUCCESSFUL') {
-      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-    }
+  //   if (serviceResponse.status !== 'SUCCESSFUL') {
+  //     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+  //   }
 
-    return res.status(200).json(serviceResponse.data);
-  }
+  //   return res.status(200).json(serviceResponse.data);
+  // }
 
   public async getRoleByToken(req: Request, res: Response): Promise<Response> {
     const { userToken } = req.body;
-    console.log('userToken', userToken);
     const serviceResponse = await this.userService.getRoleByToken(userToken);
     if (serviceResponse.status !== 'SUCCESSFUL') {
       return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
@@ -32,13 +31,13 @@ export default class UserController {
     return res.status(200).json({ role: serviceResponse.data });
   }
 
-  public async createUser(req: Request, res: Response): Promise<Response> {
-    const serviceResponse = await this.userService.createUser(req.body);
-    if (serviceResponse.status !== 'SUCCESSFUL') {
-      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-    }
-    return res.status(201).json(serviceResponse.data);
-  }
+  // public async createUser(req: Request, res: Response): Promise<Response> {
+  //   const serviceResponse = await this.userService.createUser(req.body);
+  //   if (serviceResponse.status !== 'SUCCESSFUL') {
+  //     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+  //   }
+  //   return res.status(201).json(serviceResponse.data);
+  // }
 
   public async login(req: Request, res: Response): Promise<Response> {
     const serviceResponse = await this.userService.login(req.body);
