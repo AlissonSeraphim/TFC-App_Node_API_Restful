@@ -33,6 +33,8 @@ TeamsModel.init({
   underscored: true,
 });
 
+export default TeamsModel;
+
 /**
   * `Workaround` para aplicar as associations em TS:
   * Associations 1:N devem ficar em uma das instâncias de modelo
@@ -43,5 +45,3 @@ TeamsModel.init({
 
 // Example.hasMany(OtherModel, { foreignKey: 'campoC', as: 'campoEstrangeiroC' });
 // Example.hasMany(OtherModel, { foreignKey: 'campoD', as: 'campoEstrangeiroD' });
-
-export default TeamsModel;
