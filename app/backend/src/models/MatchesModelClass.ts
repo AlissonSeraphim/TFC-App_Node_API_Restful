@@ -1,3 +1,4 @@
+import { NewEntity } from '../Interfaces';
 import { IMatchesModel } from '../Interfaces/IMatchesModel';
 import IMatches, { IMatchesUpdated } from '../Interfaces/IMatches';
 import MatchesModel from '../database/models/MatchesModel';
@@ -52,5 +53,15 @@ export default class MatchesModelClass implements IMatchesModel {
     );
 
     return [{ affectedCount }];
+  }
+
+  async create(data: NewEntity<IMatches>): Promise<IMatches> {
+    const match = await this.model.create({
+      ...data,
+      inProgress: true,
+    });
+    console.log('match', match);
+    const { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress } = match;
+    return { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress };
   }
 }

@@ -1,6 +1,6 @@
 import MatchesModelClass from '../models/MatchesModelClass';
 import { IMatchesModel } from '../Interfaces/IMatchesModel';
-import IMatches, { IMatchesServiceMessage } from '../Interfaces/IMatches';
+import IMatches, { IMatchesServiceMessage, IMatchesWithToken } from '../Interfaces/IMatches';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
 
 export default class MatchesService {
@@ -48,5 +48,17 @@ export default class MatchesService {
     }
 
     return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
+  }
+
+  public async createMatch(data: IMatchesWithToken): Promise<ServiceResponse<IMatches>> {
+    const { userToken } = data;
+
+    if (!userToken.email) {
+      return { status: 'UNAUTHORIZED', data: { message: 'Token must be a valid token' } };
+    }
+
+    const match = await this.matchesModel.create(data);
+
+    return { status: 'CREATED', data: match };
   }
 }

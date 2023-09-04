@@ -1,3 +1,4 @@
+import { NewEntity } from '.';
 import IMatches, { IMatchesUpdated } from './IMatches';
 
 export interface IMatchesModel {
@@ -8,4 +9,5 @@ export interface IMatchesModel {
     homeTeamGoals: number,
     awayTeamGoals: number,
   ) => Promise<IMatchesUpdated[]>
+  create: (data: NewEntity<IMatches>) => Promise<IMatches>
 }

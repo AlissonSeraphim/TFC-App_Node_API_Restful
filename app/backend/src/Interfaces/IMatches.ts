@@ -14,3 +14,7 @@ export interface IMatchesUpdated {
 export interface IMatchesServiceMessage {
   message: string,
 }
+
+export interface IMatchesWithToken extends IMatches {
+  userToken: { email: string },
+}
