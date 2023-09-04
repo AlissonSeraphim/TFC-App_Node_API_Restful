@@ -6,6 +6,7 @@ import { ServiceResponse } from '../Interfaces/ServiceResponse';
 export default class MatchesService {
   constructor(
     private matchesModel: IMatchesModel = new MatchesModelClass(),
+    private invalidToken: string = 'Token must be a valid token',
   ) { }
 
   public async getAllMatches(): Promise<ServiceResponse<IMatches[]>> {
@@ -23,7 +24,7 @@ export default class MatchesService {
   public async finishMatch(matchId: number): Promise<ServiceResponse<IMatchesServiceMessage>> {
     const matchesUpdated = await this.matchesModel.finishMatch(matchId);
     if (matchesUpdated[0].affectedCount === 0) {
-      return { status: 'UNAUTHORIZED', data: { message: 'Token must be a valid token' } };
+      return { status: 'UNAUTHORIZED', data: { message: this.invalidToken } };
     }
 
     return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
@@ -44,17 +45,31 @@ export default class MatchesService {
     console.log('matchesUpdated', matchesUpdated);
 
     if (!userToken.email) {
-      return { status: 'UNAUTHORIZED', data: { message: 'Token must be a valid token' } };
+      return { status: 'UNAUTHORIZED', data: { message: this.invalidToken } };
     }
 
     return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
   }
 
   public async createMatch(data: IMatchesWithToken): Promise<ServiceResponse<IMatches>> {
-    const { userToken } = data;
+    const { userToken, homeTeamId, awayTeamId } = data;
 
     if (!userToken.email) {
-      return { status: 'UNAUTHORIZED', data: { message: 'Token must be a valid token' } };
+      return { status: 'UNAUTHORIZED', data: { message: this.invalidToken } };
+    }
+
+    const haveHomeTeam = await this.matchesModel.getHomeTeamById(homeTeamId);
+    const haveAwayTeam = await this.matchesModel.getAwayTeamById(homeTeamId);
+
+    if (!haveHomeTeam || !haveAwayTeam) {
+      return { status: 'NOT_FOUND',
+        data: { message: 'There is no team with such id!' } };
+    }
+
+    if (homeTeamId === awayTeamId) {
+      return {
+        status: 'UNPROCESSABLE_ENTITY',
+        data: { message: 'It is not possible to create a match with two equal teams' } };
     }
 
     const match = await this.matchesModel.create(data);

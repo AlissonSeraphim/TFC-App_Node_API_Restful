@@ -64,4 +64,28 @@ export default class MatchesModelClass implements IMatchesModel {
     const { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress } = match;
     return { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress };
   }
+
+  async getHomeTeamById(teamId: number): Promise<IMatches | null> {
+    const dbData = await this.model.findOne({
+      where: { homeTeamId: teamId },
+      include: [
+        { model: TeamsModel, as: 'homeTeam', attributes: ['teamName'] },
+        { model: TeamsModel, as: 'awayTeam', attributes: ['teamName'] },
+      ],
+    });
+
+    return dbData;
+  }
+
+  async getAwayTeamById(teamId: number): Promise<IMatches | null> {
+    const dbData = await this.model.findOne({
+      where: { awayTeamId: teamId },
+      include: [
+        { model: TeamsModel, as: 'homeTeam', attributes: ['teamName'] },
+        { model: TeamsModel, as: 'awayTeam', attributes: ['teamName'] },
+      ],
+    });
+
+    return dbData;
+  }
 }

@@ -10,4 +10,6 @@ export interface IMatchesModel {
     awayTeamGoals: number,
   ) => Promise<IMatchesUpdated[]>
   create: (data: NewEntity<IMatches>) => Promise<IMatches>
+  getHomeTeamById: (teamId: number) => Promise<IMatches | null>
+  getAwayTeamById: (teamId: number) => Promise<IMatches | null>
 }
