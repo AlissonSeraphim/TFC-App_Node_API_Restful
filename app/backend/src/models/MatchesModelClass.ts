@@ -38,4 +38,19 @@ export default class MatchesModelClass implements IMatchesModel {
 
     return [{ affectedCount }];
   }
+
+  async updateMatch(
+    matchId: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<IMatchesUpdated[]> {
+    const [affectedCount] = await this.model.update(
+      { homeTeamGoals,
+        awayTeamGoals,
+      },
+      { where: { id: matchId } },
+    );
+
+    return [{ affectedCount }];
+  }
 }

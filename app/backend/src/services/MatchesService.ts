@@ -22,11 +22,31 @@ export default class MatchesService {
 
   public async finishMatch(matchId: number): Promise<ServiceResponse<IMatchesServiceMessage>> {
     const matchesUpdated = await this.matchesModel.finishMatch(matchId);
-
     if (matchesUpdated[0].affectedCount === 0) {
       return { status: 'UNAUTHORIZED', data: { message: 'Token must be a valid token' } };
     }
 
     return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
+  }
+
+  public async updateMatch(
+    matchId: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+    userToken: { email: string },
+  ): Promise<ServiceResponse<IMatchesServiceMessage>> {
+    const matchesUpdated = await this.matchesModel.updateMatch(
+      matchId,
+      homeTeamGoals,
+      awayTeamGoals,
+    );
+
+    console.log('matchesUpdated', matchesUpdated);
+
+    if (!userToken.email) {
+      return { status: 'UNAUTHORIZED', data: { message: 'Token must be a valid token' } };
+    }
+
+    return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
   }
 }
