@@ -16,4 +16,17 @@ export default class MatchesModelClass implements IMatchesModel {
 
     return dbData;
   }
+
+  async findByMatchProgress(isInProgress: boolean): Promise<IMatches[]> {
+    const whereCheck = isInProgress !== undefined ? { inProgress: isInProgress } : {};
+    const dbData = await this.model.findAll({
+      where: whereCheck,
+      include: [
+        { model: TeamsModel, as: 'homeTeam', attributes: ['teamName'] },
+        { model: TeamsModel, as: 'awayTeam', attributes: ['teamName'] },
+      ],
+    });
+
+    return dbData;
+  }
 }
