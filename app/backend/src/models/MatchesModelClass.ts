@@ -1,5 +1,5 @@
 import { IMatchesModel } from '../Interfaces/IMatchesModel';
-import IMatches from '../Interfaces/IMatches';
+import IMatches, { IMatchesUpdated } from '../Interfaces/IMatches';
 import MatchesModel from '../database/models/MatchesModel';
 import TeamsModel from '../database/models/TeamsModel';
 
@@ -28,5 +28,14 @@ export default class MatchesModelClass implements IMatchesModel {
     });
 
     return dbData;
+  }
+
+  async finishMatch(matchId: number): Promise<IMatchesUpdated[]> {
+    const [affectedCount] = await this.model.update(
+      { inProgress: false },
+      { where: { id: matchId } },
+    );
+
+    return [{ affectedCount }];
   }
 }

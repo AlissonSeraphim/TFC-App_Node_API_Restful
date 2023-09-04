@@ -6,3 +6,11 @@ export default interface IMatches {
   awayTeamGoals: number,
   inProgress: boolean,
 }
+
+export interface IMatchesUpdated {
+  affectedCount: number,
+}
+
+export interface IMatchesServiceMessage {
+  message: string,
+}
