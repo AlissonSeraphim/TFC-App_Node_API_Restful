@@ -7,7 +7,7 @@ class Validations {
 
     const minPasswordLength = 6;
 
-    if (user.email.length < 1 || user.password.length < 1) {
+    if (user.email?.length < 1 || user.password?.length < 1) {
       return res.status(400).json({ message: 'All fields must be filled' });
     }
 

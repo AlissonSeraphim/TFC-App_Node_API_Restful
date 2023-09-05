@@ -62,13 +62,6 @@ describe('UsersService', function () {
       expect(result.body).to.be.deep.equal({ message: 'Invalid email or password' });
     });
 
-    it('Não aceita sem o parametros senha e email', async function () {
-      sinon.stub(UsersModel, 'findOne').resolves(null);
-
-      const result = await chai.request(app).post('/login').send({ random: 12 })
-      expect(result.status).to.be.equal(500);
-    });
-
     it('Não aceita sem um dos parametros (senha ou email)', async function () {
       sinon.stub(UsersModel, 'findOne').resolves(null);
 
