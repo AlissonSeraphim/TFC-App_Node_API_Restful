@@ -12,11 +12,8 @@ export default class MatchesController {
 
     let serviceResponse;
 
-    console.log('inProgress', inProgress);
-
     if (inProgress !== undefined) {
       const inProgressStatus = inProgress === 'true';
-      console.log('inProgressStatus', inProgressStatus);
       serviceResponse = await this.matchesService.getMatchesByProgress(inProgressStatus);
     } else {
       serviceResponse = await this.matchesService.getAllMatches();
@@ -27,7 +24,6 @@ export default class MatchesController {
 
   public async finishMatch(req: Request, res: Response) {
     const { id } = req.params;
-
     const serviceResponse = await this.matchesService.finishMatch(Number(id));
 
     res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
@@ -48,6 +44,7 @@ export default class MatchesController {
   }
 
   public async createMatch(req: Request, res: Response) {
+    console.log('createMatch');
     const serviceResponse = await this.matchesService.createMatch(req.body);
 
     res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);

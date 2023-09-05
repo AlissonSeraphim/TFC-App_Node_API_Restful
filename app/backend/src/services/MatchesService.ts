@@ -23,6 +23,7 @@ export default class MatchesService {
 
   public async finishMatch(matchId: number): Promise<ServiceResponse<IMatchesServiceMessage>> {
     const matchesUpdated = await this.matchesModel.finishMatch(matchId);
+
     if (matchesUpdated[0].affectedCount === 0) {
       return { status: 'UNAUTHORIZED', data: { message: this.invalidToken } };
     }
@@ -36,6 +37,10 @@ export default class MatchesService {
     awayTeamGoals: number,
     userToken: { email: string },
   ): Promise<ServiceResponse<IMatchesServiceMessage>> {
+    if (!userToken.email) {
+      return { status: 'UNAUTHORIZED', data: { message: this.invalidToken } };
+    }
+
     const matchesUpdated = await this.matchesModel.updateMatch(
       matchId,
       homeTeamGoals,
@@ -43,10 +48,6 @@ export default class MatchesService {
     );
 
     console.log('matchesUpdated', matchesUpdated);
-
-    if (!userToken.email) {
-      return { status: 'UNAUTHORIZED', data: { message: this.invalidToken } };
-    }
 
     return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
   }
@@ -62,6 +63,7 @@ export default class MatchesService {
     const haveAwayTeam = await this.matchesModel.getAwayTeamById(homeTeamId);
 
     if (!haveHomeTeam || !haveAwayTeam) {
+      console.log('createMatch2');
       return { status: 'NOT_FOUND',
         data: { message: 'There is no team with such id!' } };
     }
@@ -71,7 +73,6 @@ export default class MatchesService {
         status: 'UNPROCESSABLE_ENTITY',
         data: { message: 'It is not possible to create a match with two equal teams' } };
     }
-
     const match = await this.matchesModel.create(data);
 
     return { status: 'CREATED', data: match };

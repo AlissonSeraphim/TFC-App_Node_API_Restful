@@ -23,6 +23,7 @@ class Validations {
   static validateToken(req: Request, res: Response, next: NextFunction): Response | void {
     const token = req.headers.authorization;
     if (!token) {
+      console.log('entrou1');
       return res.status(401).json({ message: 'Token not found' });
     }
     // split do token retirando Bearer e o espaço
@@ -30,9 +31,11 @@ class Validations {
 
     const validToken = JWT.verify(tokenSplited);
     if (validToken === 'Token must be a valid token') {
+      console.log('entrou2');
       return res.status(401).json({ message: validToken });
     }
 
+    console.log('entrou3');
     req.body.userToken = validToken;
     next();
   }

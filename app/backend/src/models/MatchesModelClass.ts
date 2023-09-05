@@ -19,7 +19,7 @@ export default class MatchesModelClass implements IMatchesModel {
   }
 
   async findByMatchProgress(isInProgress: boolean): Promise<IMatches[]> {
-    const whereCheck = isInProgress !== undefined ? { inProgress: isInProgress } : {};
+    const whereCheck = { inProgress: isInProgress };
     const dbData = await this.model.findAll({
       where: whereCheck,
       include: [
@@ -36,6 +36,8 @@ export default class MatchesModelClass implements IMatchesModel {
       { inProgress: false },
       { where: { id: matchId } },
     );
+    console.log('entrou6');
+    console.log('affectedCount', affectedCount);
 
     return [{ affectedCount }];
   }
@@ -60,7 +62,7 @@ export default class MatchesModelClass implements IMatchesModel {
       ...data,
       inProgress: true,
     });
-    console.log('match', match);
+    console.log('match CREATE', match);
     const { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress } = match;
     return { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress };
   }
