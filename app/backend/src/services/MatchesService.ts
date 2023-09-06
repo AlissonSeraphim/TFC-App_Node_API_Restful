@@ -2,10 +2,15 @@ import MatchesModelClass from '../models/MatchesModelClass';
 import { IMatchesModel } from '../Interfaces/IMatchesModel';
 import IMatches, { IMatchesServiceMessage, IMatchesWithToken } from '../Interfaces/IMatches';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
+import IMatchesFormatted from '../Interfaces/IMatchesFormatted';
+import { ITeamsModel } from '../Interfaces/ITeamsModel';
+import TeamsModelClass from '../models/TeamsModelClass';
+import { homeMatches } from '../utils/formattedPoints';
 
 export default class MatchesService {
   constructor(
     private matchesModel: IMatchesModel = new MatchesModelClass(),
+    private teamsModel: ITeamsModel = new TeamsModelClass(),
     private invalidToken: string = 'Token must be a valid token',
   ) { }
 
@@ -76,5 +81,22 @@ export default class MatchesService {
     const match = await this.matchesModel.create(data);
 
     return { status: 'CREATED', data: match };
+  }
+
+  public async getTeamsPoints(): Promise<ServiceResponse<IMatchesFormatted[]>> {
+    const allMatches = await this.matchesModel.findAll();
+    const allTeams = await this.teamsModel.findAll();
+
+    const allMatchesFormatted = allTeams.map((team) => {
+      const { id, teamName } = team;
+      const teamObj = { idTeam: id, matches: allMatches };
+      const formattedHomePoints = homeMatches(teamObj);
+      return {
+        name: teamName,
+        ...formattedHomePoints,
+      };
+    });
+
+    return { status: 'SUCCESSFUL', data: allMatchesFormatted };
   }
 }

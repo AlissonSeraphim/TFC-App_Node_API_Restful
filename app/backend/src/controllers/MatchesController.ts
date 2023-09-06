@@ -49,4 +49,10 @@ export default class MatchesController {
 
     res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
+
+  public async getMatchesWithPoints(_req: Request, res: Response) {
+    const serviceResponse = await this.matchesService.getTeamsPoints();
+
+    res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+  }
 }
