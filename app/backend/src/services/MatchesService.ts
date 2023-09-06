@@ -5,7 +5,7 @@ import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import IMatchesFormatted from '../Interfaces/IMatchesFormatted';
 import { ITeamsModel } from '../Interfaces/ITeamsModel';
 import TeamsModelClass from '../models/TeamsModelClass';
-import { homeMatches } from '../utils/formattedPoints';
+import { homeMatches, sortTeams } from '../utils/formattedPoints';
 
 export default class MatchesService {
   constructor(
@@ -84,7 +84,7 @@ export default class MatchesService {
   }
 
   public async getTeamsPoints(): Promise<ServiceResponse<IMatchesFormatted[]>> {
-    const allMatches = await this.matchesModel.findAll();
+    const allMatches = await this.matchesModel.findByMatchProgress(false);
     const allTeams = await this.teamsModel.findAll();
 
     const allMatchesFormatted = allTeams.map((team) => {
@@ -97,6 +97,8 @@ export default class MatchesService {
       };
     });
 
-    return { status: 'SUCCESSFUL', data: allMatchesFormatted };
+    const teamsSorted = sortTeams(allMatchesFormatted);
+
+    return { status: 'SUCCESSFUL', data: teamsSorted };
   }
 }
