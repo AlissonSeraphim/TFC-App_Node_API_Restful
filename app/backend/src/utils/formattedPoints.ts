@@ -42,25 +42,21 @@ export const awayMatches = ({ idTeam, matches }: Params) => {
 export const sortTeams = (teams:
 IMatchesFormattedWithEfficiency[]):
 IMatchesFormattedWithEfficiency[] => teams.sort((teamA, teamB) => {
-  // 1º Critério: Total de Pontos (em ordem decrescente)
   if (teamB.totalPoints !== teamA.totalPoints) {
     return teamB.totalPoints - teamA.totalPoints;
   }
 
-  // 2º Critério: Total de Vitórias (em ordem decrescente)
   if (teamB.totalVictories !== teamA.totalVictories) {
     return teamB.totalVictories - teamA.totalVictories;
   }
 
-  // 3º Critério: Saldo de Gols (em ordem decrescente)
   if (teamB.goalsBalance !== teamA.goalsBalance) {
     return teamB.goalsBalance - teamA.goalsBalance;
   }
 
-  // 4º Critério: Gols a Favor (em ordem decrescente)
   if (teamB.goalsFavor !== teamA.goalsFavor) {
     return teamB.goalsFavor - teamA.goalsFavor;
   }
 
-  return 0; // Times são considerados iguais em todos os critérios de desempate
+  return 0;
 });
