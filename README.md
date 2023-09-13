@@ -43,6 +43,7 @@ O back-end é responsável por implementar as regras de negócio para popular ad
 - Mocha: framework de testes para JavaScript.
 - Chai: biblioteca de assertividade para testes em JavaScript.
 - Sinon: biblioteca para testes de stubs, spies e mocks em JavaScript.
+- JSON Web Tokens (JWT): uma biblioteca para a geração e verificação de tokens, reforçando a segurança do sistema.
   
 O projeto implementou os princípios da Programação Orientada a Objetos (POO), garantindo um design sólido e expansível para as Models.
 
@@ -173,6 +174,7 @@ The backend is responsible for implementing the business rules to populate the t
 - Mocha: a testing framework for JavaScript.
 - Chai: an assertiveness library for JavaScript tests.
 - Sinon: a library for stubs, spies, and mocks in JavaScript.
+- JSON Web Tokens (JWT): a library for token generation and verification, enhancing system security. 
 
 The project implemented the principles of Object-Oriented Programming (OOP), ensuring a solid and expandable design for the Models.
 
