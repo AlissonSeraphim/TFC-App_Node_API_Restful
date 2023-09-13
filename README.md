@@ -1,4 +1,4 @@
-# [PT-BR] TFC - Tabela de Campeonato de Futebol (Estilo CartolaFC)
+# [PT-BR] TFC - Tabela de Campeonato de Futebol
 
 O TFC é um site informativo sobre partidas e classificações de futebol! ⚽️
 
